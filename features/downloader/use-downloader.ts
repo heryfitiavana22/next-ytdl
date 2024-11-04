@@ -21,8 +21,6 @@ export function useDownloader() {
       status: "downloading",
     };
     let filename = "";
-    console.log("newDownload");
-    console.log(newDownload);
 
     setDownloads((prev) => [...prev, newDownload]);
     setUrl("");
@@ -45,9 +43,6 @@ export function useDownloader() {
           if (line === "") continue;
           const dataProgress = parseProgress(line);
           if (dataProgress === null) continue;
-
-          console.log("update ", downloadId);
-          console.log(dataProgress);
 
           updateDownloadsById(downloadId, {
             progress: dataProgress.progress,

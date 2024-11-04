@@ -16,7 +16,6 @@ export async function GET(request: Request) {
   const videoUrl = decodeURIComponent(urlParams);
 
   const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);
-  console.log("DOWNLOADING", outputFilename);
 
   removeIfExists(outputPath);
 

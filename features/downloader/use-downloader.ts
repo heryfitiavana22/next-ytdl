@@ -21,6 +21,8 @@ export function useDownloader() {
       status: "downloading",
     };
     let filename = "";
+    console.log("newDownload");
+    console.log(newDownload);
 
     setDownloads((prev) => [...prev, newDownload]);
     setUrl("");
@@ -41,27 +43,34 @@ export function useDownloader() {
 
         for (const line of lines) {
           if (line === "") continue;
-          const progress = parseProgress(line);
-          if (progress === null) continue;
+          const dataProgress = parseProgress(line);
+          if (dataProgress === null) continue;
+
+          console.log("update ", downloadId);
+          console.log(dataProgress);
 
           updateDownloadsById(downloadId, {
-            progress: progress.progress,
-            title: progress.filename.replace(".mp3", ""),
+            progress: dataProgress.progress,
+            title: dataProgress.filename.replace(".mp3", ""),
             status: "downloading",
           });
 
-          filename = progress.filename;
+          filename = dataProgress.filename;
+
+          if (dataProgress.completed) {
+            await downloadFile(filename);
+            updateDownloadsById(downloadId, { status: "completed" });
+
+            toast({
+              title: "Téléchargement terminé",
+              description: `${filename} a été téléchargé avec succès.`,
+            });
+
+            setTimeout(() => removeDownload(downloadId), 1000);
+            return;
+          }
         }
       }
-      await downloadFile(filename);
-      updateDownloadsById(downloadId, { status: "completed" });
-
-      toast({
-        title: "Téléchargement terminé",
-        description: `${filename} a été téléchargé avec succès.`,
-      });
-
-      setTimeout(() => removeDownload(downloadId), 1000);
     } catch (error) {
       updateDownloadsById(downloadId, { status: "error" });
       toast({

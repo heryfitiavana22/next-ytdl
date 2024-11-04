@@ -1,7 +1,4 @@
-export type Progress = {
-  progress: number;
-  filename: string;
-};
+import { Progress } from "@/lib/ytdl/ytdl-contract";
 
 export async function fetchProgress(url: string) {
   return await fetch(`/api/progress?url=${encodeURIComponent(url)}`);

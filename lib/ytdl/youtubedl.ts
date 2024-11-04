@@ -6,7 +6,7 @@ import {
   Ytdl,
 } from "./ytdl-contract";
 import path, { join } from "path";
-import { create as createYoutubeDl, Create } from "youtube-dl-exec";
+import { create as createYoutubeDl } from "youtube-dl-exec";
 
 const executablePath = path.resolve(
   process.cwd(),
@@ -14,17 +14,14 @@ const executablePath = path.resolve(
 );
 
 export class Youtubedl implements Ytdl {
-  private youtubedl: ReturnType<Create>;
   private subscribersProgress: CbProgress[] = [];
   private subscribersCompleted: CbDownloadComplete[] = [];
 
-  constructor() {
-    this.youtubedl = createYoutubeDl(executablePath);
-  }
-
   download = async (videoUrl: string) => {
+    const youtubedl = createYoutubeDl(executablePath);
+
     const { outputFilename, outputPath } = await this.getInfo(videoUrl);
-    const subprocess = this.youtubedl.exec(videoUrl, {
+    const subprocess = youtubedl.exec(videoUrl, {
       extractAudio: true,
       audioFormat: "mp3",
       output: outputPath,
@@ -36,19 +33,31 @@ export class Youtubedl implements Ytdl {
         const match = output.match(/\[download\]\s+([\d.]+)%/);
         if (match) {
           const progress = parseInt(match[1]);
-          this.subscribersProgress.forEach((subscriber) =>
-            subscriber({ progress, filename: outputFilename })
-          );
+          this.subscribersProgress.forEach((subscriber) => {
+            if (subscriber.filename === outputFilename) {
+              subscriber.fn({
+                progress,
+                filename: outputFilename,
+                completed: false,
+              });
+            }
+          });
         }
       });
       subprocess.stdout.on("end", () => {
-        this.subscribersCompleted.forEach((subscriber) => subscriber());
+        this.subscribersCompleted.forEach((subscriber) => {
+          if (subscriber.filename === outputFilename) {
+            subscriber.fn();
+          }
+        });
       });
     }
   };
 
   getInfo = async (url: string): Promise<InfoMedia> => {
-    const info = await this.youtubedl.exec(url, {
+    const youtubedl = createYoutubeDl(executablePath);
+
+    const info = await youtubedl.exec(url, {
       dumpSingleJson: true,
       noCheckCertificates: true,
       noWarnings: true,

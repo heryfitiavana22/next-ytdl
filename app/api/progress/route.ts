@@ -16,28 +16,45 @@ export async function GET(request: Request) {
   const videoUrl = decodeURIComponent(urlParams);
 
   const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);
+  console.log("DOWNLOADING", outputFilename);
 
   removeIfExists(outputPath);
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        youtubedl.onProgress((data) => {
-          controller.enqueue(
-            JSON.stringify({
-              progress: data.progress,
-              filename: outputFilename,
-            }) + ";"
-          );
+        youtubedl.onProgress({
+          filename: outputFilename,
+          fn: (data) => {
+            console.log("PROGRESS", data);
+
+            controller.enqueue(
+              JSON.stringify({
+                progress: data.progress,
+                filename: outputFilename,
+                completed: false,
+              }) + ";"
+            );
+          },
         });
 
-        youtubedl.onDownloadComplete(() => {
-          controller.close();
+        youtubedl.onDownloadComplete({
+          filename: outputFilename,
+          fn: () => {
+            // controller.close();
+            controller.enqueue(
+              JSON.stringify({
+                progress: 100,
+                filename: outputFilename,
+                completed: true,
+              }) + ";"
+            );
+          },
         });
 
         youtubedl.download(videoUrl);
       } catch (error) {
-        console.error("Download error:", error);
+        // console.error("Download error:", error);
         controller.error(error);
       }
     },

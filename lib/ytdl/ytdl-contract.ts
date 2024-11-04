@@ -1,16 +1,23 @@
 export type Progress = {
   progress: number;
   filename: string;
+  completed: boolean;
 };
 
 export type InfoMedia = {
   title: string;
-  outputFilename: string
-  outputPath: string
+  outputFilename: string;
+  outputPath: string;
 };
 
-export type CbProgress = (progress: Progress) => void;
-export type CbDownloadComplete = () => void;
+export type CbProgress = {
+  filename: string;
+  fn: (progress: Progress) => void;
+};
+export type CbDownloadComplete = {
+  filename: string;
+  fn: () => void;
+};
 
 export interface Ytdl {
   download(url: string): void;

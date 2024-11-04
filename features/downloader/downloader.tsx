@@ -7,8 +7,7 @@ import { useDownloader } from "./use-downloader";
 import { CardDownloader } from "./components/card-downloader";
 
 export function Downloader() {
-  const { url, setUrl, downloads, startDownload, removeDownload } =
-    useDownloader();
+  const { url, setUrl, downloads, startDownload } = useDownloader();
 
   return (
     <div className="space-y-6">

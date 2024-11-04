@@ -23,8 +23,6 @@ export async function GET(request: Request) {
         youtubedl.onProgress({
           filename: outputFilename,
           fn: (data) => {
-            console.log("PROGRESS", data);
-
             controller.enqueue(
               JSON.stringify({
                 progress: data.progress,
@@ -38,7 +36,6 @@ export async function GET(request: Request) {
         youtubedl.onDownloadComplete({
           filename: outputFilename,
           fn: () => {
-            // controller.close();
             controller.enqueue(
               JSON.stringify({
                 progress: 100,

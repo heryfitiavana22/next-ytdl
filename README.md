@@ -27,7 +27,7 @@ A simple web application that allows you to download audio from YouTube videos. 
 2. Navigate to the project directory and install the dependencies:
 
    ```bash
-   cd youtube-downloader
+   cd next-ytdl
    npm install
    ```
 

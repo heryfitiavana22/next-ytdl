@@ -15,9 +15,6 @@ export function CardDownloader({ download }: CardDownloaderProps) {
             </span>
           </div>
           <CircularProgress value={download.progress} />
-          {/* <Button variant="ghost" size="icon">
-            <Trash2 className="h-4 w-4" />
-          </Button> */}
         </div>
       </CardContent>
     </Card>

@@ -19,6 +19,7 @@ export async function GET(request: Request) {
     const fileStream = createReadStream(filePath);
     const filePathToDelete = filePath;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = new NextResponse(fileStream as any, {
       headers: {
         "Content-Type": "audio/mpeg",
@@ -31,6 +32,7 @@ export async function GET(request: Request) {
         setTimeout(() => {
           removeIfExists(filePathToDelete);
         }, 1000);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {}
     });
 

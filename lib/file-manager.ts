@@ -5,6 +5,7 @@ export function removeIfExists(path: string) {
     try {
       unlinkSync(path);
       return true;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return false;
     }

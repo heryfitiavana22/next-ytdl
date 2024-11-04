@@ -30,8 +30,10 @@ async function cleanupTmpDir(maxAge = ONE_HOUR_IN_MS) {
           if (now - stats.ctimeMs > maxAge) {
             removeIfExists(filePath);
           }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {}
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {}
 }

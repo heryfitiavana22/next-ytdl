@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { join } from "path";
-import { tmpdir } from "os";
 import { removeIfExists } from "@/lib/file-manager";
 import { Youtubedl } from "@/lib/ytdl/youtubedl";
 

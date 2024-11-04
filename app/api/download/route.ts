@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
   try {
     const filePath = join(tmpdir(), filename);
-    await stat(filePath);
+    await stat(filePath);    
 
     const fileStream = createReadStream(filePath);
     const filePathToDelete = filePath;

@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   }
   const videoUrl = decodeURIComponent(urlParams);
 
-  const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);
+  const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);  
 
   removeIfExists(outputPath);
 
@@ -43,6 +43,7 @@ export async function GET(request: Request) {
                 completed: true,
               }) + ";"
             );
+            controller.close();
           },
         });
 

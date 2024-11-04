@@ -7,7 +7,8 @@ import { useDownloader } from "./use-downloader";
 import { CardDownloader } from "./components/card-downloader";
 
 export function Downloader() {
-  const { url, setUrl, downloads, startDownload } = useDownloader();
+  const { url, setUrl, downloads, startDownload, removeDownload } =
+    useDownloader();
 
   return (
     <div className="space-y-6">
@@ -26,7 +27,11 @@ export function Downloader() {
 
       <div className="grid gap-4 md:grid-cols-2">
         {downloads.map((download) => (
-          <CardDownloader download={download} key={download.id} />
+          <CardDownloader
+            download={download}
+            key={download.id}
+            onRemove={(id) => removeDownload(id)}
+          />
         ))}
       </div>
 

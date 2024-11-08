@@ -23,7 +23,7 @@ async function cleanupTmpDir(maxAge = ONE_HOUR_IN_MS) {
     const now = Date.now();
 
     for (const file of files) {
-      if (file.endsWith(".mp3")) {
+      if (file.endsWith(".mp3") || file.endsWith(".webm")) {
         const filePath = join(tempDir, file);
         try {
           const stats = await stat(filePath);

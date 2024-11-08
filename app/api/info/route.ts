@@ -16,7 +16,10 @@ export async function GET(request: Request) {
 
   const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);
 
-  if (actionParams == "delete") removeIfExists(outputPath);
+  if (actionParams == "deleteIfExist") {
+    removeIfExists(outputPath);
+    removeIfExists(outputPath.replace(".mp3", ".webm"));
+  }
 
   return Response.json({
     title: outputFilename.replace(".mp3", ""),

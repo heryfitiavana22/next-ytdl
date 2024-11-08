@@ -7,7 +7,7 @@ import { useDownloader } from "./use-downloader";
 import { CardDownloader } from "./components/card-downloader";
 
 export function Downloader() {
-  const { url, setUrl, downloads, startDownload, removeDownload } =
+  const { url, setUrl, downloads, startDownload, abortDownload } =
     useDownloader();
 
   return (
@@ -30,7 +30,7 @@ export function Downloader() {
           <CardDownloader
             download={download}
             key={download.id}
-            onRemove={(id) => removeDownload(id)}
+            onRemove={(id) => abortDownload(id)}
           />
         ))}
       </div>

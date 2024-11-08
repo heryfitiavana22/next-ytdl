@@ -3,6 +3,8 @@ import {
   CbDownloadComplete,
   CbProgress,
   InfoMedia,
+  SubscriberProgress,
+  SubscriberDownloadComplete,
   Ytdl,
 } from "./ytdl-contract";
 import path, { join } from "path";
@@ -14,10 +16,10 @@ const executablePath = path.resolve(
 );
 
 export class Youtubedl implements Ytdl {
-  private subscribersProgress: CbProgress[] = [];
-  private subscribersCompleted: CbDownloadComplete[] = [];
+  private subscribersProgress: SubscriberProgress[] = [];
+  private subscribersCompleted: SubscriberDownloadComplete[] = [];
 
-  download = async (videoUrl: string) => {
+  download = async (id: string, videoUrl: string) => {
     const youtubedl = createYoutubeDl(executablePath);
 
     const { outputFilename, outputPath } = await this.getInfo(videoUrl);
@@ -34,7 +36,7 @@ export class Youtubedl implements Ytdl {
         if (match) {
           const progress = parseInt(match[1]);
           this.subscribersProgress.forEach((subscriber) => {
-            if (subscriber.url === videoUrl) {
+            if (subscriber.id === id) {
               subscriber.fn({
                 progress,
                 filename: outputFilename,
@@ -46,7 +48,7 @@ export class Youtubedl implements Ytdl {
       });
       subprocess.stdout.on("end", () => {
         this.subscribersCompleted.forEach((subscriber) => {
-          if (subscriber.url === videoUrl) {
+          if (subscriber.id === id) {
             subscriber.fn();
           }
         });
@@ -72,11 +74,11 @@ export class Youtubedl implements Ytdl {
     return { title: originalTitle, outputFilename, outputPath };
   };
 
-  onProgress = (callback: CbProgress) => {
-    this.subscribersProgress.push(callback);
+  onProgress = (id: string, fn: CbProgress) => {
+    this.subscribersProgress.push({ id, fn });
   };
 
-  onDownloadComplete = (callback: CbDownloadComplete) => {
-    this.subscribersCompleted.push(callback);
+  onDownloadComplete = (id: string, fn: CbDownloadComplete) => {
+    this.subscribersCompleted.push({ id, fn });
   };
 }

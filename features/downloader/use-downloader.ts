@@ -10,16 +10,20 @@ export function useDownloader() {
   const [downloads, setDownloads] = useState<Download[]>([]);
   const { toast } = useToast();
 
-  const startDownload = async () => {    
-    if (!url.trim()) return;    
+  const startDownload = async () => {
+    if (!url.trim()) return;
 
     const downloadId = Date.now().toString();
+
+    const abortController = new AbortController();
+    const { signal } = abortController;
     const newDownload: Download = {
       id: downloadId,
       url,
       progress: 0,
       title: "Chargement...",
       status: "downloading",
+      abortController,
     };
     let filename = "";
 
@@ -27,12 +31,14 @@ export function useDownloader() {
     setUrl("");
 
     try {
-      const info = await getInfo(url, { action: "delete" });
+      const info = await getInfo(url, { action: "deleteIfExist", signal });
       updateDownloadsById(downloadId, {
         title: info.title,
       });
 
-      const progressResponse = await fetchProgress(encodeURIComponent(url));
+      const progressResponse = await fetchProgress(url, {
+        signal,
+      });
       const reader = progressResponse.body?.getReader();
       const decoder = new TextDecoder();
 
@@ -44,12 +50,11 @@ export function useDownloader() {
 
         const chunk = decoder.decode(value);
         const lines = chunk.split(";");
-        
+
         for (const line of lines) {
           if (line === "") continue;
           const dataProgress = parseProgress(line);
           if (dataProgress === null) continue;
-          
 
           updateDownloadsById(downloadId, {
             progress: dataProgress.progress,
@@ -57,7 +62,7 @@ export function useDownloader() {
           });
 
           if (dataProgress.completed) {
-            await downloadFile(info.outputFilename);
+            await downloadFile(info.outputFilename, { signal });
             updateDownloadsById(downloadId, { status: "completed" });
 
             toast({
@@ -70,7 +75,8 @@ export function useDownloader() {
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.name === "AbortError") return;
       updateDownloadsById(downloadId, { status: "error" });
       toast({
         title: "Erreur",
@@ -95,11 +101,23 @@ export function useDownloader() {
     setDownloads((prev) => prev.filter((download) => download.id !== id));
   };
 
+  const abortDownload = (id: string) => {
+    let newData: Download[] = [];
+    for (const download of downloads) {
+      if (download.id === id) {
+        download.abortController.abort();
+      } else {
+        newData.push(download);
+      }
+    }
+    setDownloads(newData);
+  };
+
   return {
     url,
     setUrl,
     downloads,
     startDownload,
-    removeDownload,
+    abortDownload,
   };
 }

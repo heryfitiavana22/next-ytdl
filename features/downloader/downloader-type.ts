@@ -4,4 +4,5 @@ export type Download = {
   progress: number;
   title: string;
   status: "downloading" | "completed" | "error";
+  abortController: AbortController
 };

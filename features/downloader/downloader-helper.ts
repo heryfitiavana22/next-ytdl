@@ -1,6 +1,12 @@
-export const downloadFile = async (filename: string) => {
+export const downloadFile = async (
+  filename: string,
+  options: DownloadFileOptions = {}
+) => {
   const response = await fetch(
-    `/api/download?filename=${encodeURIComponent(filename)}`
+    `/api/download?filename=${encodeURIComponent(filename)}`,
+    {
+      signal: options.signal,
+    }
   );
   if (!response.ok) throw new Error("Download failed");
 
@@ -13,4 +19,8 @@ export const downloadFile = async (filename: string) => {
   a.click();
   a.remove();
   window.URL.revokeObjectURL(url);
+};
+
+type DownloadFileOptions = {
+  signal?: AbortSignal | null;
 };

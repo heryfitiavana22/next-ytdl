@@ -10,18 +10,22 @@ export type InfoMedia = {
   outputPath: string;
 };
 
-export type CbProgress = {
-  url: string;
-  fn: (progress: Progress) => void;
-};
-export type CbDownloadComplete = {
-  url: string;
-  fn: () => void;
+export type SubscriberProgress = {
+  id: string;
+  fn: CbProgress;
 };
 
+export type CbProgress = (progress: Progress) => void;
+
+export type SubscriberDownloadComplete = {
+  id: string;
+  fn: CbDownloadComplete;
+};
+export type CbDownloadComplete = () => void;
+
 export interface Ytdl {
-  download(url: string): void;
+  download(id: string, url: string): void;
   getInfo(url: string): Promise<InfoMedia>;
-  onProgress(callback: CbProgress): void;
-  onDownloadComplete(callback: CbDownloadComplete): void;
+  onProgress(id: string, callback: CbProgress): void;
+  onDownloadComplete(id: string, callback: CbDownloadComplete): void;
 }

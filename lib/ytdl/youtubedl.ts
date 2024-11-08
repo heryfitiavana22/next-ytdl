@@ -64,6 +64,7 @@ export class Youtubedl implements Ytdl {
       noCheckCertificates: true,
       noWarnings: true,
       preferFreeFormats: true,
+      addHeader: ["referer:youtube.com", "user-agent:googlebot"],
     });
     const originalTitle = info.stdout
       ? JSON.parse(info.stdout).title

@@ -9,6 +9,7 @@ A simple web application that allows you to download audio from YouTube videos. 
 - Automatic file cleanup after download
 - Parallel downloads support
 - Error handling and notifications
+- Abort downloads
 
 ## Demo
 

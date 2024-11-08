@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { removeIfExists } from "@/lib/file-manager";
 import { Youtubedl } from "@/lib/ytdl/youtubedl";
 

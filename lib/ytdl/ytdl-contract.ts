@@ -11,11 +11,11 @@ export type InfoMedia = {
 };
 
 export type CbProgress = {
-  filename: string;
+  url: string;
   fn: (progress: Progress) => void;
 };
 export type CbDownloadComplete = {
-  filename: string;
+  url: string;
   fn: () => void;
 };
 

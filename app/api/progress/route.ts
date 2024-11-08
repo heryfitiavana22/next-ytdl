@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { removeIfExists } from "@/lib/file-manager";
 import { Youtubedl } from "@/lib/ytdl/youtubedl";
 
 const youtubedl = new Youtubedl();
@@ -13,20 +12,15 @@ export async function GET(request: Request) {
   }
   const videoUrl = decodeURIComponent(urlParams);
 
-  const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);  
-
-  removeIfExists(outputPath);
-
   const stream = new ReadableStream({
     async start(controller) {
       try {
         youtubedl.onProgress({
-          filename: outputFilename,
+          url: videoUrl,
           fn: (data) => {
             controller.enqueue(
               JSON.stringify({
                 progress: data.progress,
-                filename: outputFilename,
                 completed: false,
               }) + ";"
             );
@@ -34,16 +28,14 @@ export async function GET(request: Request) {
         });
 
         youtubedl.onDownloadComplete({
-          filename: outputFilename,
+          url: videoUrl,
           fn: () => {
             controller.enqueue(
               JSON.stringify({
                 progress: 100,
-                filename: outputFilename,
                 completed: true,
               }) + ";"
             );
-            controller.close();
           },
         });
 

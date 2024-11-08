@@ -7,8 +7,7 @@ export async function fetchProgress(url: string) {
 export function parseProgress(data: string): Progress | null {
   try {
     const parsed: Progress = JSON.parse(data);
-    if (parsed && parsed.progress !== undefined && parsed.filename)
-      return parsed;
+    if (parsed && parsed.progress !== undefined) return parsed;
     return null;
   } catch (error) {
     return null;

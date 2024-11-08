@@ -34,7 +34,7 @@ export class Youtubedl implements Ytdl {
         if (match) {
           const progress = parseInt(match[1]);
           this.subscribersProgress.forEach((subscriber) => {
-            if (subscriber.filename === outputFilename) {
+            if (subscriber.url === videoUrl) {
               subscriber.fn({
                 progress,
                 filename: outputFilename,
@@ -46,7 +46,7 @@ export class Youtubedl implements Ytdl {
       });
       subprocess.stdout.on("end", () => {
         this.subscribersCompleted.forEach((subscriber) => {
-          if (subscriber.filename === outputFilename) {
+          if (subscriber.url === videoUrl) {
             subscriber.fn();
           }
         });

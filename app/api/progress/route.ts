@@ -6,10 +6,16 @@ const youtubedl = new Youtubedl();
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const urlParams = url.searchParams.get("url");
+  const mediaTypeParams = url.searchParams.get("type");
 
-  if (!urlParams) {
+  if (!urlParams || !mediaTypeParams) {
     return new Response("Missing URL parameter", { status: 400 });
   }
+
+  if (mediaTypeParams !== "mp4" && mediaTypeParams !== "mp3") {
+    return new Response("Media type not supported", { status: 400 });
+  }
+
   const videoUrl = decodeURIComponent(urlParams);
   const videoId = Date.now().toString();
   const { signal } = request;
@@ -46,7 +52,11 @@ export async function GET(request: Request) {
           isControllerClosed = true;
         });
 
-        youtubedl.download(videoId, videoUrl);
+        if (mediaTypeParams === "mp4") {
+          youtubedl.downloadMp4({ id: videoId, url: videoUrl });
+        } else {
+          youtubedl.downloadMp3({ id: videoId, url: videoUrl });
+        }
       } catch (error) {
         controller.error(error);
       }

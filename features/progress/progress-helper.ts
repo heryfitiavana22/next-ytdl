@@ -1,11 +1,14 @@
 import { Progress } from "@/lib/ytdl/ytdl-contract";
+import { MediaType } from "../data-type";
 
 export async function fetchProgress(
   videoUrl: string,
-  options: FetchProgressOptions = {}
+  options: FetchProgressOptions
 ) {
-  const queryParams = new URLSearchParams();
-  queryParams.append("url", encodeURIComponent(videoUrl));
+  const queryParams = new URLSearchParams({
+    type: options.type,
+    url: encodeURIComponent(videoUrl),
+  });
 
   return await fetch(`/api/progress?${queryParams.toString()}`, {
     signal: options.signal,
@@ -14,6 +17,7 @@ export async function fetchProgress(
 
 type FetchProgressOptions = {
   signal?: AbortSignal | null;
+  type: MediaType;
 };
 
 export function parseProgress(data: string): Progress | null {

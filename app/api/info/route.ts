@@ -7,13 +7,22 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const urlParams = url.searchParams.get("url");
   const actionParams = url.searchParams.get("action");
+  const mediaTypeParams = url.searchParams.get("type");
 
-  if (!urlParams) {
+  if (!urlParams || !mediaTypeParams) {
     return new Response("Missing URL parameter", { status: 400 });
   }
+
+  if (mediaTypeParams !== "mp4" && mediaTypeParams !== "mp3") {
+    return new Response("Media type not supported", { status: 400 });
+  }
+
   const videoUrl = decodeURIComponent(urlParams);
 
-  const { outputFilename, outputPath } = await youtubedl.getInfo(videoUrl);
+  const { originalFilename, outputPath } = await youtubedl.getInfo({
+    url: videoUrl,
+    mediaType: mediaTypeParams,
+  });
 
   if (actionParams == "deleteIfExist") {
     removeIfExists(outputPath);
@@ -21,8 +30,8 @@ export async function GET(request: Request) {
   }
 
   return Response.json({
-    title: outputFilename.replace(".mp3", ""),
-    outputFilename,
+    title: originalFilename.replace(".mp3", ""),
+    outputFilename: originalFilename,
     outputPath,
   });
 }

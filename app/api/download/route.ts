@@ -4,17 +4,26 @@ import { join } from "path";
 import { tmpdir } from "os";
 import { stat } from "fs/promises";
 import { removeIfExists } from "@/lib/file-manager";
+import { normalizeFilename } from "@/lib/utils";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const filename = url.searchParams.get("filename");
+  const filenameParams = url.searchParams.get("filename");
+  const mediaTypeParams = url.searchParams.get("type");
 
-  if (!filename)
+  if (!filenameParams)
     return new Response("Missing filename parameter", { status: 400 });
+
+  if (mediaTypeParams !== "mp4" && mediaTypeParams !== "mp3") {
+    return new Response("Media type not supported", { status: 400 });
+  }
+
+  const tempFilename = decodeURIComponent(filenameParams);
+  const filename = normalizeFilename(tempFilename);
 
   try {
     const filePath = join(tmpdir(), filename);
-    await stat(filePath);    
+    await stat(filePath);
 
     const fileStream = createReadStream(filePath);
     const filePathToDelete = filePath;
@@ -22,7 +31,7 @@ export async function GET(request: Request) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = new NextResponse(fileStream as any, {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": mediaTypeParams === "mp4" ? "video/mp4" : "audio/mpeg",
         "Content-Disposition": `attachment; filename="${filename}"`,
       },
     });

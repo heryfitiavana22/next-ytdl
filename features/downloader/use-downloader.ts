@@ -4,9 +4,11 @@ import { Download } from "./downloader-type";
 import { fetchProgress, parseProgress } from "../progress/progress-helper";
 import { downloadFile } from "./downloader-helper";
 import { getInfo } from "../info/info-helper";
+import { MediaType } from "../data-type";
 
 export function useDownloader() {
   const [url, setUrl] = useState("");
+  const [mediaType, setMediaType] = useState<MediaType>("mp3");
   const [downloads, setDownloads] = useState<Download[]>([]);
   const { toast } = useToast();
 
@@ -24,6 +26,7 @@ export function useDownloader() {
       title: "Chargement...",
       status: "downloading",
       abortController,
+      mediaType,
     };
     let filename = "";
 
@@ -31,13 +34,18 @@ export function useDownloader() {
     setUrl("");
 
     try {
-      const info = await getInfo(url, { action: "deleteIfExist", signal });
+      const info = await getInfo(url, {
+        action: "deleteIfExist",
+        signal,
+        type: newDownload.mediaType,
+      });
       updateDownloadsById(downloadId, {
         title: info.title,
       });
 
       const progressResponse = await fetchProgress(url, {
         signal,
+        type: newDownload.mediaType,
       });
       const reader = progressResponse.body?.getReader();
       const decoder = new TextDecoder();
@@ -62,7 +70,10 @@ export function useDownloader() {
           });
 
           if (dataProgress.completed) {
-            await downloadFile(info.outputFilename, { signal });
+            await downloadFile(info.outputFilename, {
+              signal,
+              type: newDownload.mediaType,
+            });
             updateDownloadsById(downloadId, { status: "completed" });
 
             toast({
@@ -119,5 +130,7 @@ export function useDownloader() {
     downloads,
     startDownload,
     abortDownload,
+    mediaType,
+    setMediaType,
   };
 }

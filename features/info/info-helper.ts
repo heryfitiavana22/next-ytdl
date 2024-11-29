@@ -1,8 +1,11 @@
 import { InfoMedia } from "@/lib/ytdl/ytdl-contract";
+import { MediaType } from "../data-type";
 
-export async function getInfo(videoUrl: string, options: InfoOptions = {}) {
-  const queryParams = new URLSearchParams();
-  queryParams.append("url", encodeURIComponent(videoUrl));
+export async function getInfo(videoUrl: string, options: InfoOptions) {
+  const queryParams = new URLSearchParams({
+    type: options.type || "mp3",
+    url: encodeURIComponent(videoUrl),
+  });
   if (options.action) queryParams.append("action", options.action);
 
   const response = await fetch(`/api/info?${queryParams.toString()}`, {
@@ -16,4 +19,5 @@ export async function getInfo(videoUrl: string, options: InfoOptions = {}) {
 type InfoOptions = {
   action?: "deleteIfExist";
   signal?: AbortSignal | null;
+  type: MediaType;
 };

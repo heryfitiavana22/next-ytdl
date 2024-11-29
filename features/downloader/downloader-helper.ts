@@ -1,13 +1,16 @@
+import { MediaType } from "../data-type";
+
 export const downloadFile = async (
   filename: string,
-  options: DownloadFileOptions = {}
+  options: DownloadFileOptions
 ) => {
-  const response = await fetch(
-    `/api/download?filename=${encodeURIComponent(filename)}`,
-    {
-      signal: options.signal,
-    }
-  );
+  const query = new URLSearchParams({
+    filename: encodeURIComponent(filename),
+    type: options.type,
+  });
+  const response = await fetch(`/api/download?${query.toString()}`, {
+    signal: options.signal,
+  });
   if (!response.ok) throw new Error("Download failed");
 
   const blob = await response.blob();
@@ -23,4 +26,5 @@ export const downloadFile = async (
 
 type DownloadFileOptions = {
   signal?: AbortSignal | null;
+  type: MediaType;
 };

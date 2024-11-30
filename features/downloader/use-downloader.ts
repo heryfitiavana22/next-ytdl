@@ -24,6 +24,7 @@ export function useDownloader() {
       url,
       progress: 0,
       title: "Chargement...",
+      outputFilename: "",
       status: "downloading",
       abortController,
       mediaType,
@@ -41,6 +42,7 @@ export function useDownloader() {
       });
       updateDownloadsById(downloadId, {
         title: info.title,
+        outputFilename: info.outputFilename,
       });
 
       const progressResponse = await fetchProgress(url, {
@@ -70,18 +72,16 @@ export function useDownloader() {
           });
 
           if (dataProgress.completed) {
-            await downloadFile(info.outputFilename, {
-              signal,
-              type: newDownload.mediaType,
+            await onDownload({
+              ...newDownload,
+              outputFilename: info.outputFilename,
             });
             updateDownloadsById(downloadId, { status: "completed" });
 
             toast({
-              title: "Téléchargement terminé",
-              description: `${filename} a été téléchargé avec succès.`,
+              title: `Téléchargement de ${info.title} terminé`,
             });
 
-            setTimeout(() => removeDownload(downloadId), 1000);
             return;
           }
         }
@@ -95,6 +95,16 @@ export function useDownloader() {
         variant: "destructive",
       });
     }
+  };
+
+  const onDownload = async (download: Download) => {
+    await downloadFile(download.outputFilename, {
+      signal: download.abortController.signal,
+      type: download.mediaType,
+    });
+    toast({
+      title: `${download.title} a été téléchargé avec succès.`,
+    });
   };
 
   const updateDownloadsById = (id: string, data: Partial<Download>) => {
@@ -124,6 +134,14 @@ export function useDownloader() {
     setDownloads(newData);
   };
 
+  const removeOrAbortDownload = (download: Download) => {
+    if (download.status === "downloading") {
+      abortDownload(download.id);
+    } else {
+      removeDownload(download.id);
+    }
+  };
+
   return {
     url,
     setUrl,
@@ -132,5 +150,7 @@ export function useDownloader() {
     abortDownload,
     mediaType,
     setMediaType,
+    removeOrAbortDownload,
+    onDownload,
   };
 }

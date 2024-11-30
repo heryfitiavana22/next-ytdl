@@ -3,7 +3,6 @@ import { createReadStream } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 import { stat } from "fs/promises";
-import { removeIfExists } from "@/lib/file-manager";
 import { normalizeFilename } from "@/lib/utils";
 
 export async function GET(request: Request) {
@@ -26,7 +25,6 @@ export async function GET(request: Request) {
     await stat(filePath);
 
     const fileStream = createReadStream(filePath);
-    const filePathToDelete = filePath;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = new NextResponse(fileStream as any, {
@@ -34,15 +32,6 @@ export async function GET(request: Request) {
         "Content-Type": mediaTypeParams === "mp4" ? "video/mp4" : "audio/mpeg",
         "Content-Disposition": `attachment; filename="${filename}"`,
       },
-    });
-
-    fileStream.on("end", () => {
-      try {
-        setTimeout(() => {
-          removeIfExists(filePathToDelete);
-        }, 1000);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {}
     });
 
     return response;

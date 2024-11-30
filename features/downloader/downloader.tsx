@@ -14,9 +14,10 @@ export function Downloader() {
     setUrl,
     downloads,
     startDownload,
-    abortDownload,
     mediaType,
     setMediaType,
+    removeOrAbortDownload,
+    onDownload,
   } = useDownloader();
 
   return (
@@ -54,7 +55,8 @@ export function Downloader() {
           <CardDownloader
             download={download}
             key={download.id}
-            onRemove={(id) => abortDownload(id)}
+            onRemove={removeOrAbortDownload}
+            onDownload={onDownload}
           />
         ))}
       </div>

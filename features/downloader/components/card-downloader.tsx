@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Music, Trash2, Video } from "lucide-react";
+import { Download as DownloadIcon, Music, Trash2, Video } from "lucide-react";
 import { CircularProgress } from "./circular-progress";
 import { Download } from "../downloader-type";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 export function CardDownloader({
   download,
   onRemove = () => {},
+  onDownload = () => {},
 }: CardDownloaderProps) {
   return (
     <Card key={download.id}>
@@ -22,14 +23,25 @@ export function CardDownloader({
               {download.title}
             </span>
           </div>
-          <CircularProgress value={download.progress} />
+          {download.status !== "completed" && (
+            <CircularProgress value={download.progress} />
+          )}
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onRemove(download.id)}
+            onClick={() => onRemove(download)}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
+          {download.status === "completed" && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onDownload(download)}
+            >
+              <DownloadIcon className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -38,5 +50,6 @@ export function CardDownloader({
 
 type CardDownloaderProps = {
   download: Download;
-  onRemove?: (id: string) => void;
+  onRemove?: (download: Download) => void;
+  onDownload?: (download: Download) => void;
 };

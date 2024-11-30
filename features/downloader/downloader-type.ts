@@ -5,6 +5,7 @@ export type Download = {
   url: string;
   progress: number;
   title: string;
+  outputFilename: string;
   status: "downloading" | "completed" | "error";
   abortController: AbortController;
   mediaType: MediaType;

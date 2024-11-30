@@ -11,7 +11,7 @@ import {
   DownloadProgress,
   GetInfo,
 } from "./ytdl-contract";
-import path, { join, normalize } from "path";
+import path, { join } from "path";
 import { create as createYoutubeDl } from "youtube-dl-exec";
 import { normalizeFilename } from "../utils";
 

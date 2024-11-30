@@ -29,7 +29,6 @@ export function useDownloader() {
       abortController,
       mediaType,
     };
-    let filename = "";
 
     setDownloads((prev) => [...prev, newDownload]);
     setUrl("");

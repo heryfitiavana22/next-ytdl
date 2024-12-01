@@ -30,7 +30,7 @@ export function useDownloader() {
       mediaType,
     };
 
-    setDownloads((prev) => [...prev, newDownload]);
+    setDownloads((prev) => [newDownload, ...prev]);
     setUrl("");
 
     try {

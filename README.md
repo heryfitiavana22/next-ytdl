@@ -4,12 +4,14 @@ A simple web application that allows you to download audio from YouTube videos. 
 
 ## Features
 
-- Download YouTube audio in MP3 format
-- Real-time progress updates during the download
-- Automatic file cleanup after download
-- Parallel downloads support
-- Error handling and notifications
-- Abort downloads
+- [x] Download YouTube audio in MP3 or MP4 format
+- [x] Real-time progress updates during the download
+- [x] Automatic file cleanup after download
+- [x] Parallel downloads support
+- [x] Error handling and notifications
+- [x] Abort downloads
+- [x] Download history and redownload option
+- [ ] Convert webm to mp4
 
 ## Demo
 

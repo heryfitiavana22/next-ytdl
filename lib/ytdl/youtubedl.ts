@@ -33,6 +33,7 @@ export class Youtubedl implements Ytdl {
     });
     const subprocess = youtubedl.exec(url, {
       output: outputPath,
+      noPlaylist: true,
     });
 
     this.downloadProgress({
@@ -55,6 +56,7 @@ export class Youtubedl implements Ytdl {
       extractAudio: true,
       audioFormat: "mp3",
       output: outputPath,
+      noPlaylist: true,
     });
 
     this.downloadProgress({

@@ -103,6 +103,7 @@ export class Youtubedl implements Ytdl {
       noCheckCertificates: true,
       noWarnings: true,
       preferFreeFormats: true,
+      noPlaylist: true,
     });
     const parsed = JSON.parse(info.stdout);
 

@@ -12,7 +12,7 @@ A simple web application that allows you to download audio from YouTube videos. 
 - [x] Abort downloads
 - [x] Download history and redownload option
 - [ ] Convert webm to mp4
-- [ ] Support list
+- [x] Support list
 
 ## Demo
 

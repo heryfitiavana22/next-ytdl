@@ -118,6 +118,7 @@ export class Youtubedl implements Ytdl {
       outputFilename,
       outputPath,
       originalFilename: tempFilename,
+      extension,
     };
   };
 

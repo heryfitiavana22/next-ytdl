@@ -11,6 +11,7 @@ export type InfoMedia = {
   outputFilename: string;
   originalFilename: string;
   outputPath: string;
+  extension: string;
 };
 
 export type SubscriberProgress = {

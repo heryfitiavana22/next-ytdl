@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
   const videoUrl = decodeURIComponent(urlParams);
 
-  const { originalFilename, outputPath } = await youtubedl.getInfo({
+  const { originalFilename, outputPath, title } = await youtubedl.getInfo({
     url: videoUrl,
     mediaType: mediaTypeParams,
   });
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
   }
 
   return Response.json({
-    title: originalFilename.replace(".mp3", ""),
+    title,
     outputFilename: originalFilename,
     outputPath,
   });

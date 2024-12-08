@@ -110,7 +110,7 @@ export class Youtubedl implements Ytdl {
     const parsed = JSON.parse(info.stdout);
 
     const originalTitle = parsed.title || `default-${Date.now()}`;
-    const extension = mediaType == "mp4" ? parsed.ext : "mp3";
+    const extension = mediaType == "mp4" ? "mp4" : "mp3";
 
     const tempFilename = `${originalTitle}.${extension}`;
     const outputFilename = normalizeFilename(tempFilename);

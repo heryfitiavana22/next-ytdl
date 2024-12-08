@@ -34,6 +34,7 @@ export class Youtubedl implements Ytdl {
     const subprocess = youtubedl.exec(url, {
       output: outputPath,
       noPlaylist: true,
+      format: "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b",
     });
 
     this.downloadProgress({
@@ -104,6 +105,7 @@ export class Youtubedl implements Ytdl {
       noWarnings: true,
       preferFreeFormats: true,
       noPlaylist: true,
+      format: "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b",
     });
     const parsed = JSON.parse(info.stdout);
 

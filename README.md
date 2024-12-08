@@ -11,7 +11,6 @@ A simple web application that allows you to download audio from YouTube videos. 
 - [x] Error handling and notifications
 - [x] Abort downloads
 - [x] Download history and redownload option
-- [ ] Convert webm to mp4
 - [x] Support playlist (only download the video not the playlist)
 
 ## Demo

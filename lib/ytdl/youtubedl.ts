@@ -74,23 +74,24 @@ export class Youtubedl implements Ytdl {
       subprocess.stdout.on("data", (data) => {
         const output = data.toString();
         const match = output.match(/\[download\]\s+([\d.]+)%/);
-        let progress = match;
-        const lastProgress = this.mapProgress.get(id);
-        if (lastProgress && lastProgress > match) {
-          progress = lastProgress;
-        }
         if (match) {
-          const progress = parseInt(match[1]);
-          this.subscribersProgress.forEach((subscriber) => {
-            if (subscriber.id === id) {
-              subscriber.fn({
-                progress,
-                filename: outputFilename,
-                completed: false,
-              });
-              this.mapProgress.set(id, progress);
-            }
-          });
+          const lastProgress = this.mapProgress.get(id) || 0;
+          const currentProgress = parseInt(match[1]);
+          if (
+            lastProgress < currentProgress
+            // || (lastProgress === 100 && currentProgress === 0)
+          ) {
+            this.subscribersProgress.forEach((subscriber) => {
+              if (subscriber.id === id) {
+                subscriber.fn({
+                  progress: currentProgress,
+                  filename: outputFilename,
+                  completed: false,
+                });
+                this.mapProgress.set(id, currentProgress);
+              }
+            });
+          }
         }
       });
       subprocess.stdout.on("end", () => {

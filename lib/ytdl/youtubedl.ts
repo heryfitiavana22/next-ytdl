@@ -23,6 +23,7 @@ const executablePath = path.resolve(
 export class Youtubedl implements Ytdl {
   private subscribersProgress: SubscriberProgress[] = [];
   private subscribersCompleted: SubscriberDownloadComplete[] = [];
+  private mapProgress: Map<string, number> = new Map();
 
   downloadMp4 = async ({ id, url }: DownloadMp4) => {
     const youtubedl = createYoutubeDl(executablePath);
@@ -73,6 +74,11 @@ export class Youtubedl implements Ytdl {
       subprocess.stdout.on("data", (data) => {
         const output = data.toString();
         const match = output.match(/\[download\]\s+([\d.]+)%/);
+        let progress = match;
+        const lastProgress = this.mapProgress.get(id);
+        if (lastProgress && lastProgress > match) {
+          progress = lastProgress;
+        }
         if (match) {
           const progress = parseInt(match[1]);
           this.subscribersProgress.forEach((subscriber) => {
@@ -82,6 +88,7 @@ export class Youtubedl implements Ytdl {
                 filename: outputFilename,
                 completed: false,
               });
+              this.mapProgress.set(id, progress);
             }
           });
         }
@@ -90,6 +97,7 @@ export class Youtubedl implements Ytdl {
         this.subscribersCompleted.forEach((subscriber) => {
           if (subscriber.id === id) {
             subscriber.fn();
+            this.mapProgress.delete(id);
           }
         });
       });

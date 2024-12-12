@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { normalizeFilename } from "@/lib/utils";
+import { join } from "path";
+import { tmpdir } from "os";
 import { removeIfExists } from "@/lib/file-manager";
 
 export async function GET(request: Request) {
@@ -13,7 +15,8 @@ export async function GET(request: Request) {
   const filename = normalizeFilename(tempFilename);
 
   try {
-    removeIfExists(filename);
+    const filePath = join(tmpdir(), filename);
+    removeIfExists(filePath);
     return NextResponse.json(
       { message: "File removed successfully" },
       { status: 200 }

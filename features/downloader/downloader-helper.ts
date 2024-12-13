@@ -24,6 +24,15 @@ export const downloadFile = async (
   window.URL.revokeObjectURL(url);
 };
 
+export const removeFile = async (filename: string) => {
+  const query = new URLSearchParams({
+    filename: encodeURIComponent(filename),
+  });
+  const response = await fetch(`/api/remove?${query.toString()}`);
+
+  return response.ok;
+};
+
 type DownloadFileOptions = {
   signal?: AbortSignal | null;
   type: MediaType;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Download } from "./downloader-type";
 import { fetchProgress, parseProgress } from "../progress/progress-helper";
-import { downloadFile } from "./downloader-helper";
+import { downloadFile, removeFile } from "./downloader-helper";
 import { getInfo } from "../info/info-helper";
 import { MediaType } from "../data-type";
 
@@ -133,12 +133,13 @@ export function useDownloader() {
     setDownloads(newData);
   };
 
-  const removeOrAbortDownload = (download: Download) => {
+  const removeOrAbortDownload = async (download: Download) => {
     if (download.status === "downloading") {
       abortDownload(download.id);
     } else {
       removeDownload(download.id);
     }
+    await removeFile(download.outputFilename);
   };
 
   return {

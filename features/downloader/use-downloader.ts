@@ -142,6 +142,13 @@ export function useDownloader() {
     await removeFile(download.outputFilename);
   };
 
+  const copyUrl = (url: string) => {
+    navigator.clipboard.writeText(url);
+    toast({
+      title: "URL copiée",
+    });
+  };
+
   return {
     url,
     setUrl,
@@ -152,5 +159,6 @@ export function useDownloader() {
     setMediaType,
     removeOrAbortDownload,
     onDownload,
+    copyUrl,
   };
 }

@@ -18,6 +18,7 @@ export function Downloader() {
     setMediaType,
     removeOrAbortDownload,
     onDownload,
+    copyUrl,
   } = useDownloader();
 
   return (
@@ -57,6 +58,7 @@ export function Downloader() {
             key={download.id}
             onRemove={removeOrAbortDownload}
             onDownload={onDownload}
+            onClickCard={(download) => copyUrl(download.url)}
           />
         ))}
       </div>

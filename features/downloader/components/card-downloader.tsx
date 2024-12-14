@@ -8,9 +8,14 @@ export function CardDownloader({
   download,
   onRemove = () => {},
   onDownload = () => {},
+  onClickCard = () => {},
 }: CardDownloaderProps) {
   return (
-    <Card key={download.id}>
+    <Card
+      className="hover:bg-muted"
+      key={download.id}
+      onClick={() => onClickCard(download)}
+    >
       <CardContent className="pt-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2 flex-grow">
@@ -52,4 +57,5 @@ type CardDownloaderProps = {
   download: Download;
   onRemove?: (download: Download) => void;
   onDownload?: (download: Download) => void;
+  onClickCard?: (download: Download) => void;
 };

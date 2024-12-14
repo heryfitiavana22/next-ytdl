@@ -14,7 +14,7 @@ export function CardDownloader({
     <Card
       className="hover:bg-muted"
       key={download.id}
-      onClick={() => onClickCard(download)}
+      onDoubleClick={() => onClickCard(download)}
     >
       <CardContent className="pt-6">
         <div className="flex justify-between items-center">

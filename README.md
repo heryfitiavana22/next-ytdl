@@ -13,6 +13,7 @@ A simple web application that allows you to download audio from YouTube videos. 
 - [x] Support playlist (only download the video not the playlist)
 - [x] Remove file onclick trash icon
 - [x] Copy link to clipboard 
+- [x] Theme switch with light and dark mode
 
 ## Demo
 

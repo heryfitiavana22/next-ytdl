@@ -1,14 +1,18 @@
 "use client";
 
 import { useIsClient } from "@/hooks/use-is-client";
-import { PropsWithChildren } from "react";
+import React from "react";
 
-export function AssureClient({ children }: AssureClientProps) {
-  const isClient = useIsClient();
+type ComponentType<T extends Object> = (props: T) => React.JSX.Element;
 
-  if (isClient) return children;
+export function assureClient<T extends Object>(
+  WrappedComponent: ComponentType<T>
+) {
+  return (props: T) => {
+    const isClient = useIsClient();
 
-  return null;
+    if (isClient) return <WrappedComponent {...props} />;
+
+    return <></>;
+  };
 }
-
-type AssureClientProps = PropsWithChildren;

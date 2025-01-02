@@ -139,7 +139,9 @@ export function useDownloader() {
     } else {
       removeDownload(download.id);
     }
-    await removeFile(download.outputFilename);
+    if (download.status == "completed") {
+      await removeFile(download.outputFilename);
+    }
   };
 
   const copyUrl = (url: string) => {

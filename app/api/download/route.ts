@@ -4,39 +4,31 @@ import { join } from "path";
 import { tmpdir } from "os";
 import { stat } from "fs/promises";
 import { normalizeFilename } from "@/lib/utils";
+import { withFilenameAndType } from "../with-filename-and-type";
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const filenameParams = url.searchParams.get("filename");
-  const mediaTypeParams = url.searchParams.get("type");
+export const GET = withFilenameAndType(
+  async ({ params: { filename: filenameParams, mediaType } }) => {
+    const tempFilename = decodeURIComponent(filenameParams);
+    const filename = normalizeFilename(tempFilename);
 
-  if (!filenameParams)
-    return new Response("Missing filename parameter", { status: 400 });
+    try {
+      const filePath = join(tmpdir(), filename);
+      await stat(filePath);
 
-  if (mediaTypeParams !== "mp4" && mediaTypeParams !== "mp3") {
-    return new Response("Media type not supported", { status: 400 });
+      const fileStream = createReadStream(filePath);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = new NextResponse(fileStream as any, {
+        headers: {
+          "Content-Type": mediaType === "mp4" ? "video/mp4" : "audio/mpeg",
+          "Content-Disposition": `attachment; filename="${filename}"`,
+        },
+      });
+
+      return response;
+    } catch (error) {
+      console.error("File not found:", error);
+      return new Response("File not found", { status: 404 });
+    }
   }
-
-  const tempFilename = decodeURIComponent(filenameParams);
-  const filename = normalizeFilename(tempFilename);
-
-  try {
-    const filePath = join(tmpdir(), filename);
-    await stat(filePath);
-
-    const fileStream = createReadStream(filePath);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response = new NextResponse(fileStream as any, {
-      headers: {
-        "Content-Type": mediaTypeParams === "mp4" ? "video/mp4" : "audio/mpeg",
-        "Content-Disposition": `attachment; filename="${filename}"`,
-      },
-    });
-
-    return response;
-  } catch (error) {
-    console.error("File not found:", error);
-    return new Response("File not found", { status: 404 });
-  }
-}
+);

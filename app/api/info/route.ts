@@ -1,37 +1,27 @@
 import { removeIfExists } from "@/lib/file-manager";
 import { Youtubedl } from "@/lib/ytdl/youtubedl";
+import { withUrlAndType } from "../with-url-and-type";
 
 const youtubedl = new Youtubedl();
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const urlParams = url.searchParams.get("url");
-  const actionParams = url.searchParams.get("action");
-  const mediaTypeParams = url.searchParams.get("type");
+export const GET = withUrlAndType(
+  async ({ params: { url, action, mediaType } }) => {
+    const videoUrl = decodeURIComponent(url);
 
-  if (!urlParams || !mediaTypeParams) {
-    return new Response("Missing URL parameter", { status: 400 });
+    const { originalFilename, outputPath, title } = await youtubedl.getInfo({
+      url: videoUrl,
+      mediaType: mediaType,
+    });
+
+    if (action == "deleteIfExist") {
+      removeIfExists(outputPath);
+      removeIfExists(outputPath.replace(".mp3", ".webm"));
+    }
+
+    return Response.json({
+      title,
+      outputFilename: originalFilename,
+      outputPath,
+    });
   }
-
-  if (mediaTypeParams !== "mp4" && mediaTypeParams !== "mp3") {
-    return new Response("Media type not supported", { status: 400 });
-  }
-
-  const videoUrl = decodeURIComponent(urlParams);
-
-  const { originalFilename, outputPath, title } = await youtubedl.getInfo({
-    url: videoUrl,
-    mediaType: mediaTypeParams,
-  });
-
-  if (actionParams == "deleteIfExist") {
-    removeIfExists(outputPath);
-    removeIfExists(outputPath.replace(".mp3", ".webm"));
-  }
-
-  return Response.json({
-    title,
-    outputFilename: originalFilename,
-    outputPath,
-  });
-}
+);

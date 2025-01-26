@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { normalizeFilename } from "@/lib/utils";
 import { join } from "path";
-import { tmpdir } from "os";
 import { removeIfExists } from "@/lib/file-manager";
 import { withFilename } from "../with-filename";
 import { DOWNLOAD_DIR } from "@/features/constants";

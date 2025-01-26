@@ -1,6 +1,5 @@
 import { readdir, stat } from "fs/promises";
 import { join } from "path";
-import { tmpdir } from "os";
 import { removeIfExists } from "./file-manager";
 import { DOWNLOAD_DIR } from "../features/constants";
 

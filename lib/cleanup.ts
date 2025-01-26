@@ -2,7 +2,7 @@ import { readdir, stat } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
 import { removeIfExists } from "./file-manager";
-import { DOWNLOAD_DIR } from "@/features/constants";
+import { DOWNLOAD_DIR } from "../features/constants";
 
 const ONE_HOUR_IN_MS = 3600000;
 let running = false;

@@ -14,6 +14,7 @@ import {
 import path, { join } from "path";
 import { create as createYoutubeDl } from "youtube-dl-exec";
 import { normalizeFilename } from "../utils";
+import { DOWNLOAD_DIR } from "@/features/constants";
 
 const executablePath = path.resolve(
   process.cwd(),
@@ -123,7 +124,7 @@ export class Youtubedl implements Ytdl {
 
     const tempFilename = `${originalTitle}.${extension}`;
     const outputFilename = normalizeFilename(tempFilename);
-    const outputPath = join(tmpdir(), outputFilename);
+    const outputPath = join(DOWNLOAD_DIR, outputFilename);
     return {
       title: originalTitle,
       outputFilename,

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { createReadStream } from "fs";
 import { join } from "path";
-import { tmpdir } from "os";
 import { stat } from "fs/promises";
 import { normalizeFilename } from "@/lib/utils";
 import { withFilenameAndType } from "../with-filename-and-type";
+import { DOWNLOAD_DIR } from "@/features/constants";
 
 export const GET = withFilenameAndType(
   async ({ params: { filename: filenameParams, mediaType } }) => {
@@ -12,7 +12,7 @@ export const GET = withFilenameAndType(
     const filename = normalizeFilename(tempFilename);
 
     try {
-      const filePath = join(tmpdir(), filename);
+      const filePath = join(DOWNLOAD_DIR, filename);
       await stat(filePath);
 
       const fileStream = createReadStream(filePath);

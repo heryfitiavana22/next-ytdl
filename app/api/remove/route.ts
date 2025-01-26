@@ -4,6 +4,7 @@ import { join } from "path";
 import { tmpdir } from "os";
 import { removeIfExists } from "@/lib/file-manager";
 import { withFilename } from "../with-filename";
+import { DOWNLOAD_DIR } from "@/features/constants";
 
 export const GET = withFilename(
   async ({ params: { filename: filenameParams } }) => {
@@ -11,7 +12,7 @@ export const GET = withFilename(
     const filename = normalizeFilename(tempFilename);
 
     try {
-      const filePath = join(tmpdir(), filename);
+      const filePath = join(DOWNLOAD_DIR, filename);
       removeIfExists(filePath);
       return NextResponse.json(
         { message: "File removed successfully" },

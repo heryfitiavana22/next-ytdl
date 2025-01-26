@@ -25,6 +25,10 @@ https://github.com/user-attachments/assets/b673f1ce-19f4-4903-9e5c-c7b52c716a56
 
 ## Getting Started
 
+### Requirements
+
+- [FFmpeg](https://ffmpeg.org/download.html)
+
 ### Installation
 
 1. Clone the repository:

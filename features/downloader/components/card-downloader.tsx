@@ -16,9 +16,9 @@ export function CardDownloader({
       key={download.id}
       onDoubleClick={() => onClickCard(download)}
     >
-      <CardContent className="pt-6">
+      <CardContent className="">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2 flex-grow">
+          <div className="flex items-center space-x-2 grow">
             {download.mediaType === "mp3" ? (
               <Music className="h-4 w-4" />
             ) : (

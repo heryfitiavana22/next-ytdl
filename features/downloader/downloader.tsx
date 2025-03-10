@@ -44,7 +44,7 @@ export function Downloader() {
           placeholder="Collez l'URL YouTube ici"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="flex-grow"
+          className="grow"
         />
         <Button onClick={startDownload}>
           <Download className="mr-2 h-4 w-4" /> Télécharger

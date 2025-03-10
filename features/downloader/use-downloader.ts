@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { Download } from "./downloader-type";
 import { fetchProgress, parseProgress } from "../progress/progress-helper";
 import { downloadFile, removeFile } from "./downloader-helper";
 import { getInfo } from "../info/info-helper";
 import { MediaType } from "../data-type";
+import { toast } from "sonner";
 
 export function useDownloader() {
   const [url, setUrl] = useState("");
   const [mediaType, setMediaType] = useState<MediaType>("mp3");
   const [downloads, setDownloads] = useState<Download[]>([]);
-  const { toast } = useToast();
 
   const startDownload = async () => {
     if (!url.trim()) return;
@@ -77,9 +76,7 @@ export function useDownloader() {
             });
             updateDownloadsById(downloadId, { status: "completed" });
 
-            toast({
-              title: `Téléchargement de ${info.title} terminé`,
-            });
+            toast(`Téléchargement de ${info.title} terminé`);
 
             return;
           }
@@ -88,10 +85,8 @@ export function useDownloader() {
     } catch (error: any) {
       if (error.name === "AbortError") return;
       updateDownloadsById(downloadId, { status: "error" });
-      toast({
-        title: "Erreur",
+      toast("Erreur", {
         description: "Une erreur est survenue lors du téléchargement.",
-        variant: "destructive",
       });
     }
   };
@@ -101,9 +96,7 @@ export function useDownloader() {
       signal: download.abortController.signal,
       type: download.mediaType,
     });
-    toast({
-      title: `${download.title} a été téléchargé avec succès.`,
-    });
+    toast(`${download.title} a été téléchargé avec succès.`);
   };
 
   const updateDownloadsById = (id: string, data: Partial<Download>) => {
@@ -146,9 +139,7 @@ export function useDownloader() {
 
   const copyUrl = (url: string) => {
     navigator.clipboard.writeText(url);
-    toast({
-      title: "URL copiée",
-    });
+    toast("URL copiée");
   };
 
   return {

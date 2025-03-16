@@ -1,6 +1,5 @@
 # next-ytdl
-
-A simple web application that allows you to download audio from YouTube videos. Built with Next.js and [youtube-dl-exec](https://github.com/microlinkhq/youtube-dl-exec).
+A simple web application that allows you to download audio or video from YouTube. Built with Next.js and [youtube-dl-exec](https://github.com/microlinkhq/youtube-dl-exec).
 
 ## Features
 

@@ -5,6 +5,11 @@ COPY --from=node:20-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN npm install -g pnpm
 
 COPY package*.json pnpm-lock.yaml ./

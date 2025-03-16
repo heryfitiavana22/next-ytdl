@@ -17,9 +17,9 @@ A simple web application that allows you to download audio or video from YouTube
 ## Demo
 
 
-https://github.com/user-attachments/assets/b673f1ce-19f4-4903-9e5c-c7b52c716a56
 
 
+https://github.com/user-attachments/assets/ab24dd87-f9ec-46ba-9170-6deca3753848
 
 
 ## Getting Started

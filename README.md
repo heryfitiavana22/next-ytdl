@@ -13,7 +13,7 @@ A simple web application that allows you to download audio or video from YouTube
 - [x] Remove file onclick trash icon
 - [x] Copy link to clipboard 
 - [x] Theme switch with light and dark mode
-
+- [x] Docker support
 ## Demo
 
 
@@ -50,4 +50,47 @@ https://github.com/user-attachments/assets/ab24dd87-f9ec-46ba-9170-6deca3753848
    ```
 
    The application will be available at `http://localhost:3000`.
+
+## Running with Docker
+
+You can also run the application using Docker:
+
+### Requirements
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Running the Application
+
+1. Build and start the containers:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+   This will build the Docker image and start the application in detached mode.
+
+2. The application will be available at `http://localhost:3000`.First time you run it, it will take a while to compile the app.
+
+3. To stop the containers:
+
+   ```bash
+   docker-compose down
+   ```
+
+### Building the Docker Image Only
+
+If you want to build the Docker image without starting the application:
+
+```bash
+docker build -t next-ytdl .
+```
+
+Then you can run the container manually:
+
+```bash
+docker run -p 3000:3000 next-ytdl
+```
+
+
 

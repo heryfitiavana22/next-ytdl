@@ -24,39 +24,6 @@ export function PreventLeavingPage({
 
   useEffect(() => {
     /**
-     * Used to prevent navigation when user clicks a navigation `<Link />` or `<a />`.
-     * @param e The triggered event.
-     */
-    let lastClickTime = 0;
-    const debounceTime = 300; // milliseconds
-
-    const handleClick = (event: MouseEvent) => {
-      const now = Date.now();
-      if (now - lastClickTime < debounceTime) return;
-      lastClickTime = now;
-
-      let target = event.target as HTMLAnchorElement;
-      while (target && target.tagName !== "A") {
-        target = target.parentElement as HTMLAnchorElement;
-      }
-
-      if (target && target.tagName === "A") {
-        target = target as HTMLAnchorElement;
-
-        if (
-          isDirty &&
-          typeof window !== "undefined" &&
-          target.href !== window.location.href
-        ) {
-          window.history.pushState(null, document.title, window.location.href);
-          const isOk = windowConfirm();
-          if (isOk) {
-            router.push(target.href);
-          }
-        }
-      }
-    };
-    /**
      * Used to prevent navigation when using `back` browser buttons.
      */
     const handlePopState = () => {
@@ -79,7 +46,6 @@ export function PreventLeavingPage({
 
     if (typeof window !== "undefined") {
       /* *************************** Open listeners ************************** */
-      document.addEventListener("click", handleClick);
       window.addEventListener("popstate", handlePopState);
       window.addEventListener("beforeunload", handleBeforeUnload);
     }
@@ -87,7 +53,6 @@ export function PreventLeavingPage({
     /* ************** Return from useEffect closing listeners ************** */
     return () => {
       if (typeof window !== "undefined") {
-        document.removeEventListener("click", handleClick);
         window.removeEventListener("popstate", handlePopState);
         window.removeEventListener("beforeunload", handleBeforeUnload);
       }

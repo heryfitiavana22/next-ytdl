@@ -94,6 +94,8 @@ If you want to build the Docker image without starting the application:
 docker build --target dev -t next-ytdl .
 ```
 
+> Change to `--target prod` if you want to run in production
+
 Then you can run the container manually:
 
 ```bash

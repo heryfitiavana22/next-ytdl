@@ -24,9 +24,10 @@ https://github.com/user-attachments/assets/ab24dd87-f9ec-46ba-9170-6deca3753848
 
 ## Getting Started
 
-### Requirements
+### Requirements for *youtube-dl-exec*
 
 - [FFmpeg](https://ffmpeg.org/download.html)
+- [python](https://www.python.org/)
 
 ### Installation
 
@@ -49,7 +50,14 @@ https://github.com/user-attachments/assets/ab24dd87-f9ec-46ba-9170-6deca3753848
    npm run dev
    ```
 
-   The application will be available at `http://localhost:3000`.
+4. Build and Start the production server:
+
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+   The application will be available at [`http://localhost:3000`](http://localhost:3000).
 
 ## Running with Docker
 
@@ -70,7 +78,7 @@ You can also run the application using Docker:
 
    This will build the Docker image and start the application in detached mode.
 
-2. The application will be available at `http://localhost:3000`.First time you run it, it will take a while to compile the app.
+2. The application will be available at [`http://localhost:3000`].First time you run it, it will take a while to compile the app.
 
 3. To stop the containers:
 
@@ -83,7 +91,7 @@ You can also run the application using Docker:
 If you want to build the Docker image without starting the application:
 
 ```bash
-docker build -t next-ytdl .
+docker build --target dev -t next-ytdl .
 ```
 
 Then you can run the container manually:

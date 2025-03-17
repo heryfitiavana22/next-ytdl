@@ -2,13 +2,12 @@ FROM node:20-alpine AS base
 RUN apk add --no-cache \
     python3 \
     ffmpeg
-RUN npm install -g pnpm
+RUN corepack enable pnpm && corepack install -g pnpm@latest-10
 
 FROM base AS deps
 WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile && \
-    pnpm store prune
+RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app

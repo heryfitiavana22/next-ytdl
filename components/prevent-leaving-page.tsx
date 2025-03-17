@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, PropsWithChildren } from "react";
-import { useRouter } from "next/navigation";
 
 export function PreventLeavingPage({
   title = "Changes you made may not be saved.",
   isDirty,
   children,
 }: PreventLeavingPageProps) {
-  const router = useRouter();
-
   const windowConfirm = () => {
     return window.confirm(title);
   };

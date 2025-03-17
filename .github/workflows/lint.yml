@@ -1,6 +1,8 @@
-name: Lint
+name: Linting and checking validity of types
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
   lint:

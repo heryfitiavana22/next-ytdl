@@ -1,23 +1,31 @@
-FROM python:3.11-slim
+FROM node:20-alpine AS base
+RUN apk add --no-cache \
+    python3 \
+    ffmpeg
+RUN corepack enable pnpm && corepack install -g pnpm@latest-10
 
-COPY --from=node:20-slim /usr/local/bin /usr/local/bin
-COPY --from=node:20-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-
+FROM base AS deps
 WORKDIR /app
-
-RUN apt-get update && \
-    apt-get install -y ffmpeg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g pnpm
-
 COPY package*.json pnpm-lock.yaml ./
-
 RUN pnpm install --frozen-lockfile
 
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN pnpm build
 
+FROM base AS dev
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 EXPOSE 3000
-
 CMD ["pnpm", "dev"]
+
+FROM base AS prod
+WORKDIR /app
+COPY --from=builder /app/.next ./.next
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json ./
+EXPOSE 3000
+CMD ["pnpm", "start"]

@@ -10,3 +10,5 @@ docker-compose.yml
 .git
 .github
 .vscode
+.next
+demo.mp4

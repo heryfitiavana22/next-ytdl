@@ -1,8 +1,9 @@
-version: '3.8'
 
 services:
   app:
-    build: .
+    build: 
+      context: .
+      target: dev
     container_name: next-ytdl
     image: next-ytdl:latest
     ports:

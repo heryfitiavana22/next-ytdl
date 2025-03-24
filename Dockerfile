@@ -24,8 +24,10 @@ CMD ["pnpm", "dev"]
 
 FROM base AS prod
 WORKDIR /app
-COPY --from=builder /app/.next ./.next
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=deps /app/node_modules/youtube-dl-exec/bin ./node_modules/youtube-dl-exec/bin
 COPY package.json ./
 EXPOSE 3000
-CMD ["pnpm", "start"]
+CMD HOSTNAME="0.0.0.0" node server.js

@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+  - youtube-dl-exec

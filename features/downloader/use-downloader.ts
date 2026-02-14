@@ -82,7 +82,8 @@ export function useDownloader() {
           }
         }
       }
-    } catch (error: any) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
       if (error.name === "AbortError") return;
       updateDownloadsById(downloadId, { status: "error" });
       toast("Erreur", {
@@ -115,7 +116,7 @@ export function useDownloader() {
   };
 
   const abortDownload = (id: string) => {
-    let newData: Download[] = [];
+    const newData: Download[] = [];
     for (const download of downloads) {
       if (download.id === id) {
         download.abortController.abort();

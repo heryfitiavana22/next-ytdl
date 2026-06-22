@@ -54,8 +54,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.1.18)
       youtube-dl-exec:
-        specifier: ^3.1.1
-        version: 3.1.1
+        specifier: ^3.1.8
+        version: 3.1.8
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4
@@ -2339,8 +2339,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  youtube-dl-exec@3.1.1:
-    resolution: {integrity: sha512-7WKX/awVuIJ20bnQVVIQtQ7W28pt+Wo2rJx3hfAbuOkQYeQR2Omd25vz5s9GzL932FSatvTH9edajw3Rw6ZMpw==}
+  youtube-dl-exec@3.1.8:
+    resolution: {integrity: sha512-ob5NT5NbueVb4oSOa7yivxZG18wBhGEu9JNxzqaGEyZnvjZXJlRycUogHgWNsng8jUwceSxJsBdZlgbBO5gDHg==}
     engines: {node: '>= 18'}
 
   zod-validation-error@4.0.2:
@@ -4783,7 +4783,7 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  youtube-dl-exec@3.1.1:
+  youtube-dl-exec@3.1.8:
     dependencies:
       binary-version-check: 6.1.0
       dargs: 7.0.0
